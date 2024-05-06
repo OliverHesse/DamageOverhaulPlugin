@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
+import java.rmi.server.UID;
+import java.util.UUID;
+
 public class CustomPlayer {
     private final Player player;
     private final Plugin plugin;
@@ -45,6 +48,8 @@ public class CustomPlayer {
         this.player.getPersistentDataContainer().set(new NamespacedKey(this.plugin, "PierceVulnerability"), PersistentDataType.DOUBLE, 0d);
         this.player.getPersistentDataContainer().set(new NamespacedKey(this.plugin, "BludgeonVulnerability"), PersistentDataType.DOUBLE, 0d);
         this.player.getPersistentDataContainer().set(new NamespacedKey(this.plugin, "NormalVulnerability"), PersistentDataType.DOUBLE, 0d);
+
+
     }
 
     //updates the players total defence
@@ -101,4 +106,29 @@ public class CustomPlayer {
     public Double getDefence(){
         return this.player.getPersistentDataContainer().get(new NamespacedKey(this.plugin, "Defence"), PersistentDataType.DOUBLE);
     }
+    public void setLastDamageType(DamageTypeEnum damageType, UUID enemyID,Double damage){
+        this.player.getPersistentDataContainer().set(new NamespacedKey(this.plugin,"enemyID"+enemyID.toString()),PersistentDataType.STRING,damageType.asString());
+        this.player.getPersistentDataContainer().set(new NamespacedKey(this.plugin,"damage"+enemyID.toString()),PersistentDataType.DOUBLE,damage);
+    }
+    public DamageTypeEnum getLastDamageType(UUID enemyID){
+        String damageType = this.player.getPersistentDataContainer().get(new NamespacedKey(this.plugin,"enemyID"+enemyID.toString()),PersistentDataType.STRING);
+
+        if(damageType == null){
+            return null;
+        }
+        return DamageTypeEnum.typeFromString(damageType);
+
+    }
+    public Double getLastDamageAmount(UUID enemyID){
+        return this.player.getPersistentDataContainer().get(new NamespacedKey(this.plugin,"damage"+enemyID.toString()),PersistentDataType.DOUBLE);
+    }
+    public void removeLastDamageType(UUID enemyID){
+        this.player.getPersistentDataContainer().remove(new NamespacedKey(this.plugin,"enemyID"+enemyID.toString()));
+        this.player.getPersistentDataContainer().remove(new NamespacedKey(this.plugin,"damage"+enemyID.toString()));
+    }
+
+    public Player getPlayer(){
+        return this.player;
+    }
+
 }

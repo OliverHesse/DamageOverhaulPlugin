@@ -1,5 +1,8 @@
 package me.oliverhesse.damageoverhaul;
 
+import org.bukkit.damage.DamageSource;
+import org.bukkit.event.entity.EntityDamageEvent;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -74,4 +77,19 @@ public enum DamageTypeEnum {
         }
         return toReturn;
     }
+    public static DamageTypeEnum typeFromString (String typeName){
+
+        return switch (typeName) {
+            case "Bleed" -> DamageTypeEnum.BLEED;
+            case "Slash" -> DamageTypeEnum.SLASH;
+            case "Pierce" -> DamageTypeEnum.PIERCE;
+            case "Bludgeon" -> DamageTypeEnum.BLUDGEON;
+            case "Almighty" -> DamageTypeEnum.ALMIGHTY;
+            case "Heat" -> DamageTypeEnum.HEAT;
+            case "Burn" -> DamageTypeEnum.BURN;
+            default -> DamageTypeEnum.NORMAL;
+        };
+
+    }
+
 }
