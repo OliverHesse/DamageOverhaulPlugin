@@ -20,7 +20,10 @@ public final class DamageOverhaul extends JavaPlugin {
     public void onEnable() {
 
         // Plugin startup logic
+        //regiser commands
+        getCommand("spawn").setExecutor(new CommandSpawn());
 
+        //register listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         //create task so i can display stats
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
@@ -28,20 +31,6 @@ public final class DamageOverhaul extends JavaPlugin {
                 sendStatActionBar(player,0d);
             }
         }, 0L, 40L); // 20 ticks = 1 second, so 2 seconds = 40 ticks
-
-        //spawn test entity
-        World thisWorld = getServer().getWorlds().get(0);
-        taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                sendStatActionBar(player,0d);
-                Location newLocation = player.getLocation().clone();
-                newLocation.setX(newLocation.getX()+4);
-                LivingEntity newZombie = (LivingEntity) thisWorld.spawnEntity(newLocation,EntityType.ZOMBIE);
-
-                CustomMob customZombie = new CustomMob(this,newZombie,200,100,0.1f,"Custom Zombie");
-                customZombie.setNameDisplayed(true);
-            }
-        }, 0L, 600L);//10seconds
 
 
     }
